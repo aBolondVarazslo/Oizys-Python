@@ -114,14 +114,14 @@ def tokenize(expr):
 # Dictionaries
 variables = {}
 constants = {}
-keywords = {"and", "or", "not", "if", "else", "while", "for", "null", "del", "done"}
+keywords = {"and", "or", "not", "if", "else", "while", "for", "null", "del", "done", "CLEAR", "RESET"}
 
 
 # Parses math
 def parse_factor(tokens):
     if not tokens:
         raise ValueError("Unexpected end of input")
-    
+
     token = tokens.pop(0)
 
     if token == "done":
@@ -131,7 +131,7 @@ def parse_factor(tokens):
         value = parse_factor(tokens)
         if isinstance(value, (int, float)):
             return -value
-        
+
         else:
             raise ValueError("Unary negative can only be applied to numbers")
 
@@ -141,12 +141,10 @@ def parse_factor(tokens):
 
         if not tokens or tokens.pop(0) != ")":
             raise ValueError("Expected ')'")
-    
 
     else:
         if token.isdigit():
             value = int(token)
-        
 
         else:
             if token in variables:
@@ -154,23 +152,23 @@ def parse_factor(tokens):
 
             elif token in constants:
                 value = constants[token]
-            
+
             elif isinstance(token, str) and (token.startswith('"') or token.startswith("'")):
                 value = token[1:-1]
-            
+
             else:
                 raise ValueError(f"Undefined variable or invalid token: {token}")
 
 
     while tokens and tokens[0] in ("!", "!!", "!!!"):
         op = tokens.pop(0)
-        
+
         if not isinstance(value, int) or value < 0:
             raise ValueError("Factorial only works on non-negative integers")
-        
+
         if op == "!":
             value = factorial(value)
-        
+
         elif op == "!!":
             value = double_facorial(value)
 
@@ -182,7 +180,7 @@ def parse_factor(tokens):
 
 def parse_term(tokens):
     value = parse_power(tokens)
-    
+
     while tokens and tokens[0] in ("*", "/"):
         op = tokens.pop(0)
         right = parse_factor(tokens)
@@ -192,27 +190,27 @@ def parse_term(tokens):
 
         else:
             value /= right
-    
+
     return value
 
 
 def parse_expression(tokens):
     value = parse_term(tokens)
-    
+
     while tokens and tokens[0] in ("+", "-"):
         op = tokens.pop(0)
         right = parse_term(tokens)
-    
+
         if op == "+":
             if isinstance(value, str) or isinstance(right, str):
                 value = str(value) + str(right)
-            
+
             else:
                 value += right
 
         else:
             value -= right
-    
+
     return value
 
 
@@ -225,22 +223,22 @@ def parse_comparison(tokens):
 
         if op == "==":
             value = value == right
-        
+
         elif op == "!=":
             value = value != right
-        
+
         elif op == ">":
             value = value > right
-        
+
         elif op == "<":
             value = value < right
-        
+
         elif op == ">=":
             value = value >= right
-        
+
         elif op == "<=":
             value = value <= right
-        
+
     return value
 
 
@@ -261,7 +259,7 @@ def parse_logical_not(tokens):
         tokens.pop(0)
         value = parse_logical_not(tokens)
         return not value
-    
+
     else:
         return parse_comparison(tokens)
 
@@ -284,7 +282,7 @@ def parse_logical_or(tokens):
         tokens.pop(0)
         right = parse_logical_and(tokens)
         value = value or right
-    
+
     return value
 
 
@@ -292,24 +290,24 @@ def parse_logical_or(tokens):
 def factorial(n):
     if n == 0 or n == 1:
         return 1
-    
+
     result = 1
-    
+
     for i in range(2, n + 1):
         result *= i
-    
+
     return result
 
 
 def double_facorial(n):
     if n < 0:
         raise ValueError("Double factorial not defined for negative numbers")
-    
+
     if n == 0 or n == 1:
         return 1
-    
+
     result = 1
-    
+
     for i in range(n, 0, -2):
         result *= i
 
@@ -319,15 +317,15 @@ def double_facorial(n):
 def triple_factorial(n):
     if n < 0:
         raise ValueError("Triple factorial no defined for negative numbers")
-    
+
     if n == 0 or n == 1 or n == 2:
         return 1
-    
+
     result = 1
 
     for i in range(n, 0, -3):
         result *= i
-    
+
     return result
 
 
@@ -337,8 +335,8 @@ def evaluate(tokens):
 
     if tokens:
         raise ValueError(f"Unexpected input after expression: {' '.join(tokens)}")
-    
+
     if isinstance(result, float) and result.is_integer():
         return int(result)
-    
+
     return result

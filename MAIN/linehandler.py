@@ -8,7 +8,7 @@ def handle_lines(lines_deque):
 def handle_line(line, lines_deque):
     if line.startswith("#") or not line or line == "done":
         return
-    
+
     if line == "else:":
         raise ValueError("Unexpected 'else' without matching 'if'")
 
@@ -49,22 +49,31 @@ def handle_line(line, lines_deque):
         if_block = read_block(lines_deque)
 
         else_block = []
-        
+
         if lines_deque and lines_deque[0].strip() == "else:":
             lines_deque.popleft()
             else_block = read_block(lines_deque)
-        
+
         chosen_block = if_block if condition_result else else_block
 
         for blk_line in chosen_block:
             handle_line(blk_line, lines_deque)
-    
+
     elif line.startswith("out "):
         expr = line[len("out "):].strip()
         tokens = tokenize(expr)
         value = evaluate(tokens)
         print(value)
-    
+
+    elif line == "CLEAR":
+        print("\033[2J\033[H", end="")
+
+    elif line == "RESET":
+        variables.clear()
+        constants.clear()
+        print("\033[2J\033[H", end="")
+        print("Environment reset")
+
     elif line.startswith("while ") and line.endswith(":"):
         condition_expr = line[6:-1].strip()
         loop_block = read_block(lines_deque)
