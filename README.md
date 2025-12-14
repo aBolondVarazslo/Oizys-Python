@@ -10,6 +10,7 @@ A basic interpreted programming language designed for learning and experimentati
 - `null` to reset variables, `del` to delete them
 - Basic error handling for invalid syntax or usage
 - `while` loop functionality
+- `CLEAR` and `RESET` to clear terminal and reset environment respectively
 
 ## Installation
 
@@ -17,7 +18,7 @@ Requires Python 3.x. Clone the repository and run the interpreter:
 
 ```bash
 git clone https://github.com/yourusername/Oizys-Python
-cd oizys
+cd Oizys-Python
 python MAIN/interpreter.py {path-to-oizys-script}
 ```
 
