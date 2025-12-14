@@ -1,5 +1,6 @@
 from main import *
 from nulldel import *
+from help import GENERAL_HELP, HELP
 
 def handle_lines(lines_deque):
     while lines_deque:
@@ -73,6 +74,13 @@ def handle_line(line, lines_deque):
         constants.clear()
         print("\033[2J\033[H", end="")
         print("Environment reset")
+    
+    elif line == "help":
+        print(GENERAL_HELP)
+
+    elif line.startswith("help "):
+        instruction = line[5:].strip()
+        print(HELP.get(instruction, f"No help for '{instruction}'. Is it a valid instruction?"))
 
     elif line.startswith("while ") and line.endswith(":"):
         condition_expr = line[6:-1].strip()
