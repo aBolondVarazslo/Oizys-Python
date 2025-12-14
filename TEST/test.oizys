@@ -7,16 +7,22 @@ if 3 == 3:
 
 # const abc = "alphabet"
 
+
 else:
     green = "yellow"
     done
 
+out a
 b
 out b
 out "jack"
 out 3
 a = 1
 
-while 3 == 3:
+while a <= 3:
     a = a + 1
     done
+
+CLEAR
+RESET
+out a
